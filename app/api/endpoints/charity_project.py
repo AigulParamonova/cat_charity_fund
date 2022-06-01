@@ -9,10 +9,11 @@ from app.api.validators import (check_name_duplicate, check_project_exists,
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
+from app.crud.donation import donation_crud
 from app.schemas.charity_project import (CharityProjectCreate,
                                          CharityProjectDB,
                                          CharityProjectUpdate)
-# from app.services.invest import project_invest_process
+from app.services.invest import investment_process
 
 router = APIRouter()
 
@@ -45,7 +46,11 @@ async def create_new_project(
     '''
     await check_name_duplicate(project.name, session)
     new_project = await charity_project_crud.create_obj_with_datetime(project, session)
-    # await project_invest_process(new_project, session)
+    await investment_process(
+        from_obj_invest=new_project,
+        in_obj_invest=donation_crud,
+        session=session
+    )
     return new_project
 
 

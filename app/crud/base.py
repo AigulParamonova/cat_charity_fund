@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import select
+from sqlalchemy import select, asc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas.user import UserDB
@@ -33,6 +33,20 @@ class CRUDBase:
         '''Получение всех объектов в БД.'''
         db_objs = await session.execute(select(self.model))
         return db_objs.scalars().all()
+
+    async def get_for_separations(
+        self,
+        session: AsyncSession
+    ):
+        '''Получение всех объектов с незакрытыми инвестициями.'''
+        objs = await session.scalars(
+            select(self.model).where(
+                self.model.fully_invested.is_(False)
+            ).order_by(
+                asc('create_date')
+            )
+        )
+        return objs.all()
 
     async def create_obj_with_datetime(
         self,
