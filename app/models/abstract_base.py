@@ -29,6 +29,5 @@ class AbstractBase(Base):
     __table_args__ = (
         CheckConstraint('full_amount > 0'),
         CheckConstraint('invested_amount >= 0'),
-        CheckConstraint('invested_amount <= full_amount'),
-        CheckConstraint('create_date <= close_date')
+        CheckConstraint('invested_amount <= full_amount')
     )

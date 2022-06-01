@@ -67,8 +67,7 @@ async def remove_project(
     '''Только для суперюзеров.
     Удаляет проект.
     '''
-    await check_project_exists(project_id, session)
-    project = check_project_invest(project_id, session)
+    project = await check_project_invest(project_id, session)
     project_delete = await charity_project_crud.remove(project, session)
     return project_delete
 
