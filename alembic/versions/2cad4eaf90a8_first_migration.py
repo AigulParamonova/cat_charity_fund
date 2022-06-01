@@ -1,7 +1,7 @@
 """First migration
 
-Revision ID: 92e590ed4613
-Revises: Create Date: 2022-05-29 12:03:14.174794
+Revision ID: 2cad4eaf90a8
+Revises: Create Date: 2022-06-01 20:08:18.960305
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision = '92e590ed4613'
+revision = '2cad4eaf90a8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,7 +28,6 @@ def upgrade():
         sa.Column('close_date', sa.DateTime(), nullable=True),
         sa.Column('name', sa.String(length=100), nullable=False),
         sa.Column('description', sa.Text(), nullable=False),
-        sa.CheckConstraint('create_date <= close_date'),
         sa.CheckConstraint('full_amount > 0'),
         sa.CheckConstraint('invested_amount <= full_amount'),
         sa.CheckConstraint('invested_amount >= 0'),
@@ -56,7 +55,6 @@ def upgrade():
         sa.Column('close_date', sa.DateTime(), nullable=True),
         sa.Column('user_id', fastapi_users_db_sqlalchemy.guid.GUID(), nullable=True),
         sa.Column('comment', sa.Text(), nullable=True),
-        sa.CheckConstraint('create_date <= close_date'),
         sa.CheckConstraint('full_amount > 0'),
         sa.CheckConstraint('invested_amount <= full_amount'),
         sa.CheckConstraint('invested_amount >= 0'),
