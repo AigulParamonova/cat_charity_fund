@@ -6,6 +6,7 @@ from app.core.config import settings
 
 
 class PreBase:
+    id = Column(Integer, primary_key=True)
 
     @declared_attr
     def __tablename__(cls):
@@ -13,7 +14,6 @@ class PreBase:
         имени модели, переведённого в нижний регистр.
         """
         return cls.__name__.lower()
-    id = Column(Integer, primary_key=True)
 
 
 Base = declarative_base(cls=PreBase)

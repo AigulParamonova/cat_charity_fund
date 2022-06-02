@@ -1,3 +1,4 @@
+import logging
 from typing import Optional, Union
 
 from fastapi import Depends, Request
@@ -12,6 +13,7 @@ from app.core.config import settings
 from app.core.db import get_async_session
 from app.models.user import UserTable
 from app.schemas.user import User, UserCreate, UserDB, UserUpdate
+from app.services import constans as const
 
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
@@ -47,17 +49,17 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
     ) -> None:
         if len(password) < 3:
             raise InvalidPasswordException(
-                reason='Password should be at least 3 characters'
+                reason=const.PASSSWORD_LEN_ERROR
             )
         if user.email in password:
             raise InvalidPasswordException(
-                reason='Password should not contain e-mail'
+                reason=const.PASSWORD_VALIDATION
             )
 
     async def on_after_register(
             self, user: UserDB, request: Optional[Request] = None
     ):
-        print(f'Пользователь {user.email} был зарегистрирован')
+        logging.error(const.USER_EXISTS_ERROR)
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):
